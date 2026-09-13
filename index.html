@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula - Drive Your Dream Car</title>
+    <!-- Google Fonts: Inter for that clean, modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- Reset & Global Variables --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --hero-gradient: linear-gradient(135deg, #16455a 0%, #2b6b82 100%);
+            --dark-bg: #0f172a;
+            --primary-blue: #2563eb;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --success-green: #10b981;
+        }
+
+        body {
+            color: var(--text-main);
+            background-color: var(--card-bg);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        img { max-width: 100%; height: auto; display: block; }
+
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-blue {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-blue:hover { background-color: #1d4ed8; }
+
+        .btn-white {
+            background-color: white;
+            color: var(--text-main);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        /* --- Header --- */
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 50;
+            padding: 24px 0;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: white; }
+
+        /* --- Hero Section --- */
+        .hero {
+            background: var(--hero-gradient);
+            padding-top: 140px;
+            padding-bottom: 100px;
+            position: relative;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 60px;
+        }
+
+        .hero-visuals {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            margin-bottom: -80px; /* Overlap the search bar */
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-car {
+            width: 320px;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
+        }
+
+        .hero-people {
+            width: 200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+        }
+
+        /* --- Search Filter Bar --- */
+        .search-bar-wrapper {
+            position: relative;
+            z-index: 10;
+            margin-top: 20px;
+        }
+
+        .search-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 24px 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .filter-box {
+            flex: 1;
+            text-align: left;
+        }
+
+        .filter-box label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .filter-box select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            background-color: #f9fafb;
+            outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            cursor: pointer;
+        }
+
+        /* --- Trusted Brands --- */
+        .brands-section {
+            padding: 100px 0 40px;
+            text-align: center;
+        }
+
+        .brands-section p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .brand-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            filter: grayscale(100%);
+            opacity: 0.5;
+        }
+
+        .brand-logos img {
+            height: 24px;
+            width: auto;
+        }
+
+        /* --- Value Proposition --- */
+        .value-prop {
+            text-align: center;
+            padding: 40px 0 60px;
+        }
+
+        .value-prop h2 {
+            font-size: 28px;
+            font-weight: 500;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            line-height: 1.4;
+            color: var(--text-main);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 32px;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .stat-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .feature-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .feature-tab {
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .feature-tab.active {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        /* --- Featured Car Section --- */
+        .featured-section {
+            background-color: #f3f4f6;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 240px;
+            font-weight: 800;
+            color: rgba(0,0,0,0.03);
+            letter-spacing: 15px;
+            z-index: 0;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .featured-image {
+            max-width: 900px;
+            margin: 0 auto 30px;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15));
+        }
+
+        .featured-section h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-specs {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 14px;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+            margin-bottom: 40px;
+        }
+
+        .featured-specs span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .carousel-controls button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .carousel-controls button:hover {
+            background: #f9fafb;
+        }
+
+        /* --- Inventory Section --- */
+        .inventory-section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+
+        .inventory-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .inventory-tabs button {
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding-bottom: 8px;
+            position: relative;
+        }
+
+        .inventory-tabs button.active {
+            color: var(--primary-blue);
+        }
+
+        .inventory-tabs button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-blue);
+        }
+
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .car-card {
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--card-bg);
+            transition: all 0.3s ease;
+        }
+
+        .car-card:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.06);
+            transform: translateY(-4px);
+        }
+
+        .car-image-container {
+            height: 220px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        .car-image-container img {
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: #ecfdf5;
+            color: #065f46;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .car-info {
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .car-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .car-price {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .car-price span {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .add-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-main);
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .add-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .view-all-container {
+            text-align: center;
+        }
+
+        /* --- Why Choose Section --- */
+        .why-choose {
+            background-color: var(--dark-bg);
+            color: white;
+            padding: 100px 0;
+        }
+
+        .why-choose-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .why-choose-text h2 {
+            font-size: 36px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        .why-choose-text p {
+            color: #94a3b8;
+            font-size: 15px;
+            margin-bottom: 40px;
+            max-width: 90%;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 20px;
+        }
+
+        .feature-icon-box {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: white;
+            font-size: 20px;
+        }
+
+        .feature-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .feature-content p {
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* --- Testimonials --- */
+        .testimonials-section {
+            padding: 100px 0;
+            background: #ffffff;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            background: white;
+        }
+
+        .testimonial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .stars {
+            color: #f59e0b;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+        .verified-badge {
+            font-size: 11px;
+            background: #ecfdf5;
+            color: #065f46;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .testimonial-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 24px;
+            min-height: 80px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-author img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .author-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* --- FAQ Section --- */
+        .faq-section {
+            padding: 100px 0;
+            background: var(--light-bg);
+        }
+
+        .faq-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 50px;
+        }
+
+        .faq-header h2 {
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .faq-header p {
+            font-size: 14px;
+            color: var(--text-muted);
+            max-width: 300px;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .faq-item {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .faq-item:hover {
+            border-color: #cbd5e1;
+        }
+
+        .faq-item h4 {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .faq-item i {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        /* --- Bottom CTA --- */
+        .bottom-cta {
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=2000') center/cover;
+            padding: 80px 0;
+            color: white;
+        }
+
+        .bottom-cta-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bottom-cta-text h2 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .bottom-cta-text p {
+            color: #94a3b8;
+            font-size: 15px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: #ffffff;
+            padding: 80px 0 30px;
+            border-top: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-col h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .footer-col p, .footer-col li {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary-blue);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            font-size: 13px;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-watermark {
+            position: absolute;
+            bottom: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 300px;
+            font-weight: 800;
+            color: rgba(0,0,0,0.02);
+            z-index: 0;
+            pointer-events: none;
+            white-space: nowrap;
+            letter-spacing: -10px;
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 40px; }
+            .stats-grid, .car-grid, .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+            .why-choose-layout { grid-template-columns: 1fr; gap: 40px; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .hero-car { width: 250px; }
+            .hero-people { width: 150px; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .search-bar { flex-direction: column; align-items: stretch; }
+            .stats-grid, .car-grid, .testimonial-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .featured-specs { flex-wrap: wrap; justify-content: center; gap: 15px; }
+            .bottom-cta-content { flex-direction: column; text-align: center; gap: 30px; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 15px; text-align: center; }
+            .footer-bottom-links { justify-content: center; }
+            .hero-visuals { flex-direction: column; align-items: center; margin-bottom: -40px; }
+            .hero-car { width: 100%; max-width: 300px; }
+            .featured-watermark { font-size: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container nav-wrapper">
+            <div class="logo">Formula.</div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#">Inventory</a></li>
+                    <li><a href="#">Sell Car</a></li>
+                    <li><a href="#">Financing</a></li>
+                    <li><a href="#">About Us</a></li>
+                </ul>
+            </nav>
+            <a href="#" class="btn btn-outline" style="border: 1px solid rgba(255,255,255,0.4);">Book a Test Drive</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Drive Your Dream<br>Car With Confidence</h1>
+            <p>Trusted Quality Since 2015</p>
+            
+            <div class="hero-visuals">
+                <!-- Replace these with your actual transparent car PNGs -->
+                <img src="https://purepng.com/public/uploads/large/purepng.com-white-hyundai-tucson-carcarvehicletransporthyundai-961524665863ykhtq.png" alt="White SUV" class="hero-car">
+                <img src="https://purepng.com/public/uploads/large/purepng.com-peoplepeoplepeople-941524676063e0s1t.png" alt="People" class="hero-people">
+                <img src="https://purepng.com/public/uploads/large/purepng.com-black-hyundai-tucson-carcarvehicletransporthyundai-961524665866m2s7b.png" alt="Black SUV" class="hero-car">
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Filter Bar (Overlapping Hero) -->
+    <div class="container search-bar-wrapper">
+        <div class="search-bar">
+            <div class="filter-box">
+                <label>Brands</label>
+                <select>
+                    <option>Toyota</option>
+                    <option>Honda</option>
+                    <option>Mazda</option>
+                </select>
+            </div>
+            <div class="filter-box">
+                <label>Price</label>
+                <select>
+                    <option>$100,000 - $50,000</option>
+                    <option>$50,000 - $100,000</option>
+                </select>
+            </div>
+            <div class="filter-box">
+                <label>Year of Production</label>
+                <select>
+                    <option>2021 - 2026</option>
+                    <option>2015 - 2020</option>
+                </select>
+            </div>
+            <div class="filter-box">
+                <label>Category</label>
+                <select>
+                    <option>Low Cost Green Car</option>
+                    <option>SUV</option>
+                    <option>MPV</option>
+                </select>
+            </div>
+            <button class="btn btn-blue" style="padding: 14px 32px;">Search Car</button>
+        </div>
+    </div>
+
+    <!-- Trusted Brands -->
+    <section class="brands-section container">
+        <p>Trusted car brands available in our garage</p>
+        <div class="brand-logos">
+            <!-- Use actual brand logos here -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/Toyota_carlogo.svg" alt="Toyota">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Hyundai_Motor_Company_logo.svg" alt="Hyundai">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Mazda_logo.svg" alt="Mazda">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Suzuki_logo_2.svg" alt="Suzuki">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Honda_Logo.svg" alt="Honda">
+        </div>
+    </section>
+
+    <!-- Value Proposition -->
+    <section class="value-prop container">
+        <h2>Simplifying how you buy and sell quality cars through seamless financing, trade-ins, and verified quality checks.</h2>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>15+</h3>
+                <p>Trusted financing partners</p>
+            </div>
+            <div class="stat-card">
+                <h3>250+</h3>
+                <p>Cars inspected routine</p>
+            </div>
+            <div class="stat-card">
+                <h3>99%</h3>
+                <p>Customer satisfaction rate</p>
+            </div>
+            <div class="stat-card">
+                <h3>24/7</h3>
+                <p>Emergency assistance</p>
+            </div>
+        </div>
+
+        <div class="feature-tabs">
+            <div class="feature-tab active">Buy and sell</div>
+            <div class="feature-tab">Trade-ins</div>
+            <div class="feature-tab">Cash</div>
+            <div class="feature-tab">Installments</div>
+        </div>
+    </section>
+
+    <!-- Featured Car -->
+    <section class="featured-section">
+        <div class="featured-watermark">RAIZE</div>
+        <div class="container">
+            <!-- Replace with actual featured car image -->
+            <img src="https://purepng.com/public/uploads/large/purepng.com-toyota-raize-carcarvehicletransporttoyota-961524664363f5q8v.png" alt="Toyota Raize" class="featured-image">
+            <h3>Toyota Raize GR Sport 1.0 T AT</h3>
+            <div class="featured-specs">
+                <span><i class="fas fa-tag"></i> $34,900</span>
+                <span><i class="fas fa-tachometer-alt"></i> 18.500KM</span>
+                <span><i class="fas fa-cog"></i> Automatic</span>
+                <span><i class="fas fa-calendar-alt"></i> 2022</span>
+                <span><i class="fas fa-gas-pump"></i> Petrol</span>
+            </div>
+            <div class="carousel-controls">
+                <button><i class="fas fa-chevron-left"></i></button>
+                <button><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inventory -->
+    <section class="inventory-section container">
+        <h2 class="section-title">Current Stock In Our Garage</h2>
+        
+        <div class="inventory-tabs">
+            <button class="active">All</button>
+            <button>LCGC</button>
+            <button>SUV</button>
+            <button>MPV</button>
+            <button>Hatchback</button>
+            <button>City Car</button>
+            <button>Sedan</button>
+        </div>
+
+        <div class="car-grid">
+            <!-- Card 1 -->
+            <div class="car-card">
+                <div class="car-image-container">
+                    <img src="https://purepng.com/public/uploads/large/purepng.com-toyota-vios-carcarvehicletransporttoyota-961524664455f0d2v.png" alt="Toyota Vios">
+                </div>
+                <div class="car-info">
+                    <div>
+                        <div class="car-title">Toyota Vios</div>
+                        <div class="car-price"><span>$12,000</span> $10,200.00</div>
+                    </div>
+                    <button class="add-btn">+</button>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="car-card">
+                <div class="car-image-container">
+                    <span class="badge">New Arrival</span>
+                    <img src="https://purepng.com/public/uploads/large/purepng.com-daihatsu-sigra-carcarvehicletransportdaihatsu-961524664552q7k4x.png" alt="Daihatsu Sigra">
+                </div>
+                <div class="car-info">
+                    <div>
+                        <div class="car-title">Daihatsu Sigra</div>
+                        <div class="car-price"><span>$10,000</span> $7,500.00</div>
+                    </div>
+                    <button class="add-btn">+</button>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="car-card">
+                <div class="car-image-container">
+                    <img src="https://purepng.com/public/uploads/large/purepng.com-toyota-avanza-carcarvehicletransporttoyota-961524664635w3z6p.png" alt="Toyota Avanza">
+                </div>
+                <div class="car-info">
+                    <div>
+                        <div class="car-title">Toyota All New Avanza</div>
+                        <div class="car-price"><span>$15,000</span> $13,800.00</div>
+                    </div>
+                    <button class="add-btn">+</button>
+                </div>
+            </div>
+            <!-- Card 4 -->
+            <div class="car-card">
+                <div class="car-image-container">
+                    <img src="https://purepng.com/public/uploads/large/purepng.com-honda-city-hatchback-carcarvehicletransporthonda-961524664721l5z8k.png" alt="Honda City Hatchback">
+                </div>
+                <div class="car-info">
+                    <div>
+                        <div class="car-title">Honda City Hatchback RS</div>
+                        <div class="car-price"><span>$17,000</span> $14,400.00</div>
+                    </div>
+                    <button class="add-btn">+</button>
+                </div>
+            </div>
+            <!-- Card 5 -->
+            <div class="car-card">
+                <div class="car-image-container">
+                    <img src="https://purepng.com/public/uploads/large/purepng.com-mazda-cx-3-carcarvehicletransportmazda-961524664856x7q2m.png" alt="Mazda CX-3">
+                </div>
+                <div class="car-info">
+                    <div>
+                        <div class="car-title">Mazda CX-3</div>
+                        <div class="car-price"><span>$25,000</span> $20,700.00</div>
+                    </div>
+                    <button class="add-btn">+</button>
+                </div>
+            </div>
+            <!-- Card 6 -->
+            <div class="car-card">
+                <div class="car-image-container">
+                    <img src="https://purepng.com/public/uploads/large/purepng.com-toyota-innova-zenix-carcarvehicletransporttoyota-961524664932p9r4w.png" alt="Toyota Innova Zenix">
+                </div>
+                <div class="car-info">
+                    <div>
+                        <div class="car-title">Toyota Innova Zenix</div>
+                        <div class="car-price"><span>$30,000</span> $25,900.00</div>
+                    </div>
+                    <button class="add-btn">+</button>
+                </div>
+            </div>
+        </div>
+        <div class="view-all-container">
+            <button class="btn btn-blue">View All</button>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-choose">
+        <div class="container why-choose-layout">
+            <div class="why-choose-text">
+                <h2>Why Choose Formula<br>For Your Next Car</h2>
+                <p>Every vehicle in our inventory undergoes strict inspection and verification to ensure safety, performance, and legal compliance.</p>
+                <button class="btn btn-white">Book a Test Drive</button>
+            </div>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon-box"><i class="fas fa-shield-alt"></i></div>
+                    <div class="feature-content">
+                        <h4>Accident And Flood-Free Guarantee</h4>
+                        <p>Every car is guaranteed free from major structural damage from major collisions or water damage.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-box"><i class="fas fa-chart-line"></i></div>
+                    <div class="feature-content">
+                        <h4>Original Mileage Guaranteed</h4>
+                        <p>No tampered odometers. All mileage figures are fully verified through official service records.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-box"><i class="fas fa-file-contract"></i></div>
+                    <div class="feature-content">
+                        <h4>Authentic Legal Documents</h4>
+                        <p>Every car comes with 100% verified ownership papers, tax compliance, and clean registration history.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-box"><i class="fas fa-tools"></i></div>
+                    <div class="feature-content">
+                        <h4>150-Point Multi-Zone Inspection</h4>
+                        <p>Thorough evaluation covering engine health, transmission smoothness, and electrical systems.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+        <div class="container">
+            <h2 class="section-title">What Our Verified Buyers<br>Say About Formula</h2>
+            <div class="testimonial-grid">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="stars">★★★★★ 5.0</div>
+                        <div class="verified-badge"><i class="fas fa-check-circle"></i> Very Satisfied</div>
+                    </div>
+                    <p class="testimonial-text">Buying my first family SUV here was completely transparent. The inspection report matched the car's condition perfectly, and the handover took less than two days.</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" alt="Vanessa J.">
+                        <div class="author-info">
+                            <h4>Vanessa J.</h4>
+                            <p>Bought Toyota Raize</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="stars">★★★★★ 5.0</div>
+                        <div class="verified-badge"><i class="fas fa-check-circle"></i> Very Satisfied</div>
+                    </div>
+                    <p class="testimonial-text">I was worried about hidden issues when buying a pre-owned sedan, but Formula guaranteed zero accident history. The financing team also handled everything smoothly.</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" alt="K. Michael L.">
+                        <div class="author-info">
+                            <h4>K. Michael L.</h4>
+                            <p>Bought Honda Civic</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="stars">★★★★★ 4.9</div>
+                        <div class="verified-badge"><i class="fas fa-check-circle"></i> Satisfied</div>
+                    </div>
+                    <p class="testimonial-text">The 12-month engine warranty and full document verification gave me complete peace of mind. Highly recommend to anyone looking for a professional and trustworthy pre-owned dealership experience.</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150" alt="Rina K.">
+                        <div class="author-info">
+                            <h4>Rina K.</h4>
+                            <p>Bought Suzuki XL7</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="faq-header">
+                <h2>Got Questions?<br>We've Got Answers</h2>
+                <p>Can't find the answer you're looking for? Reach out to our support team.</p>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h4>Does Formula provide a warranty on purchased vehicles?</h4>
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-item">
+                    <h4>Can I schedule a home test drive before buying?</h4>
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-item">
+                    <h4>What documents do I need to prepare for car installment financing?</h4>
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-item">
+                    <h4>How does the trade-in process work with my current car?</h4>
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-item">
+                    <h4>How does Formula verify the condition of pre-owned cars?</h4>
+                    <i class="fas fa-plus"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="bottom-cta">
+        <div class="container bottom-cta-content">
+            <div class="bottom-cta-text">
+                <h2>Ready To Drive Home<br>Your Dream Car Today?</h2>
+                <p>Browse verified pre-owned vehicles ready for inspection and immediate dispatch.</p>
+            </div>
+            <button class="btn btn-blue" style="padding: 16px 36px; font-size: 16px;">Book a Test Drive</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-watermark">Formula.</div>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Formula.</h4>
+                    <p>The most trusted marketplace for buying, selling, and trading pre-owned cars with verified inspection and total transparency.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Our Garage</h4>
+                    <p>Jl. Sudirman Kav. 52-53<br>Jakarta Selatan 12190<br>Indonesia</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">Buy a Car</a></li>
+                        <li><a href="#">Sell Your Car</a></li>
+                        <li><a href="#">Trade-In</a></li>
+                        <li><a href="#">Car Financing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Book a Test Drive</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy policy</a>
+                    <a href="#">Terms & services</a>
+                </div>
+                <div>
+                    &copy; 2026 Formula. All Rights Reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
